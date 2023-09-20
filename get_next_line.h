@@ -6,7 +6,7 @@
 /*   By: daroldan < daroldan@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:28:14 by daroldan          #+#    #+#             */
-/*   Updated: 2023/09/18 01:45:12 by daroldan         ###   ########.fr       */
+/*   Updated: 2023/09/20 00:51:00 by daroldan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ft_strrchr(char *chain, int c);
 char	*ft_strchr(char *chain, int c);
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 2
 
 # endif
 #endif
