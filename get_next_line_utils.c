@@ -6,38 +6,18 @@
 /*   By: daroldan < daroldan@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 20:04:41 by daroldan          #+#    #+#             */
-/*   Updated: 2023/09/20 21:00:35 by daroldan         ###   ########.fr       */
+/*   Updated: 2023/09/21 22:17:49 by daroldan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	ft_bzero(void *s, size_t n)
-{
-	unsigned char	*p;
-
-	p = s;
-	while (n--)
-		p[n] = 0;
-}
-
-void	*ft_calloc(size_t h, size_t len)
-{
-	void	*ptr;
-
-	ptr = malloc (h * len);
-	if (!ptr)
-		return (NULL);
-	ft_bzero(ptr, (h * len));
-	return (ptr);
-}
 
 size_t	ft_strlen(char *s)
 {
 	size_t	cont;
 
 	cont = 0;
-	if (s == NULL && !s[cont])
+	if (s == NULL || s[cont] == '\0')
 		return (0);
 	while (s[cont])
 		cont++;
@@ -51,6 +31,8 @@ char	*ft_strdup(char *source)
 	size_t	len;
 
 	h = ft_strlen(source);
+	if (source == NULL)
+		return (NULL);
 	j = malloc((sizeof(char)) * (h + 1));
 	if (!j)
 		return (NULL);
@@ -97,7 +79,9 @@ char	*ft_strchr(char *chain, int c)
 	unsigned int	len;
 	char			*subchain;
 
-	len = ft_strlen(chain);
+	len = 0;
+	while (chain[len] != '\0')
+		len++;
 	if (!chain)
 		return (NULL);
 	j = 0;
@@ -106,9 +90,9 @@ char	*ft_strchr(char *chain, int c)
 		if (chain[j] == (char)c)
 		{
 			subchain = malloc ((sizeof(char)) * (j + 1));
-			subchain = &chain[j];
+			subchain = &chain[j + 1];
 			subchain[j + 1] = '\0';
-			return (free (chain), subchain);
+			return (subchain);
 		}
 		j++;
 	}

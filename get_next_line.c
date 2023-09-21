@@ -6,7 +6,7 @@
 /*   By: daroldan < daroldan@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:24:58 by daroldan          #+#    #+#             */
-/*   Updated: 2023/09/20 21:06:33 by daroldan         ###   ########.fr       */
+/*   Updated: 2023/09/21 23:46:32 by daroldan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		p[cont + cont2] = s2[cont2];
 		cont2++;
 	}
-	p[(cont + cont2) + 1] = '\0';
+	p[(cont + cont2)] = '\0';
 	return (p);
 }
 
@@ -55,6 +55,7 @@ char	*ft_joinfree(char *str, char *str2)
 	s3 = ft_strjoin(str, str2);
 	s3[ft_strlen(s3) + 1] = '\0';
 	free (str);
+	str2 = NULL;
 	return (s3);
 }
 
@@ -66,15 +67,16 @@ char	*readsave(int fd, char	*strold)
 
 	posstr = 1;
 	heap = NULL;
-	heap = ft_joinfree(heap, strold);
+	heap = ft_strdup(strold);
 	while (posstr > 0)
 	{	
 		posstr = read(fd, buffer, BUFFER_SIZE);
 		if (posstr < 0)
-			return (free(heap), NULL);
+			return (NULL);
 		else if (posstr == 0)
 			return (heap);
-		else if (posstr < BUFFER_SIZE)
+		buffer[posstr] = '\0';
+		if (posstr < BUFFER_SIZE)
 			return (ft_joinfree(heap, buffer));
 		heap = ft_joinfree(heap, buffer);
 		heap[ft_strlen(heap) + 1] = '\0';
@@ -96,7 +98,7 @@ char	*ft_get_line(char	*buffer)
 		pos++;
 	line = malloc((sizeof(char)) * (pos + 1));
 	if (!line)
-		return (free(buffer), NULL);
+		return (NULL);
 	pos = 0;
 	while (buffer[pos - 1] != '\n' && buffer[pos])
 	{
@@ -119,10 +121,14 @@ char	*get_next_line(int fd)
 	buffer = malloc ((sizeof (char)) * (BUFFER_SIZE + 1));
 	buffer = readsave(fd, strstatic);
 	if (!buffer)
-		return (free(buffer), NULL);
+	{
+		free (buffer);
+		return (NULL);
+	}
 	len = ft_strlen(buffer);
 	buffer[len + 1] = '\0';
 	strstatic = ft_strrchr(buffer, '\n');
 	print = ft_get_line(buffer);
-	return (free (buffer), print);
+	free(buffer);
+	return (print);
 }

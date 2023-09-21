@@ -1,7 +1,3 @@
-12345678910
+12345678910   
+    lk
 10987654321
-abcdefghijk
-
-
-linea final
-end. or not :).

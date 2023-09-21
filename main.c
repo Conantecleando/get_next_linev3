@@ -6,7 +6,7 @@
 /*   By: daroldan < daroldan@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 23:08:08 by daroldan          #+#    #+#             */
-/*   Updated: 2023/09/19 19:55:15 by daroldan         ###   ########.fr       */
+/*   Updated: 2023/09/21 23:13:59 by daroldan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ while (s)
 {
 	s = get_next_line (fd);
 	printf("\n el string es %s", s);
-	free (s);
 }
 atexit(ft_leaks);
 return (0);

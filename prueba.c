@@ -6,13 +6,13 @@
 /*   By: daroldan < daroldan@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:05:00 by daroldan          #+#    #+#             */
-/*   Updated: 2023/09/20 18:39:44 by daroldan         ###   ########.fr       */
+/*   Updated: 2023/09/21 23:27:55 by daroldan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(char *s)
 {
 	int	cont;
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (cont);
 }
 
-char	*ft_join(strstatic, buffer)
+char	*ft_join(char	*strstatic, char	*buffer)
 {
 	char		*cube;
 	int			len;
@@ -33,56 +33,76 @@ char	*ft_join(strstatic, buffer)
 		return (strstatic);
 	cont = 0;
 	contbis = 0;
-	len = (ft_strlen(buffer) + ft_strlen(strstatic));
+	while (buffer[cont] != '\0')
+		cont++;
+	while (strstatic[contbis] != '\0')
+		contbis++;
+	len = (cont + contbis);
 	cube = malloc ((sizeof(char)) * len);
-	while (buffer[cont] != '\0'&& buffer)
-		cube[cont] = buffer[cont++];
-	while (strstatic[contbis] != '\0' && strstatic)
-		cube[cont + contbis] = strstatic[contbis++];
 	cube[len + 1] = '\0';
+	cont = -1;
+	contbis = -1;
+	while (buffer[++cont] != '\0')
+		cube[cont] = buffer[cont];
+	while (strstatic[++contbis])
+		cube[(cont + contbis)] = strstatic[contbis];
 	return (cube);
 }		
 
-char	*ft_get_line_sp(len, buffer)
+char	*ft_get_line_sp(size_t len, char	*buffer)
 {
 	char	*cutline;
 	size_t	lenline;
-	size_t	cont;
-	size_t	contbuf;
 
-	lenline = 0;
-	cont = 0;
-	contbuf = 0;
+	lenline = -1;
+	len = -1;
 	if (!buffer)
 		return (NULL);
-	while (*buffer[lenline] != '\n' && *buffer[lenline] != '\0')
-		lenline++;
-	cutline = malloc ((sizeof(char)) * (lenline + 1));
-	while (lenline >= cont)
-		*cutline[cont++] = *buffer[contbuf++];
-	cutline[lenline + 1] = '\0';
-	return (cutline);
+	while (buffer[++lenline] != '\0')
+	{	
+		if (buffer[lenline] == '\n')
+		{
+			cutline = malloc ((sizeof(char)) * (lenline + 1));
+			while (++len != lenline)
+			{
+				cutline[len] = buffer [len];
+				if (len == lenline)
+				{
+					cutline[lenline + 1] = '\0';
+					return (cutline);
+				}
+			}
+		}
+	}
+	return (NULL);
 }
 
-char	*ft_get_new_line(len, buffer)
+char	*ft_get_new_line(size_t len, char	*buffer)
 {
 	char	*final;
 	size_t	lenfinal;
-	size_t	rest;
-	size_t	cont;
 
 	if (!buffer)
-		return (0);
-	lenfinal = 0;
-	while (buffer[lenfinal] != '\n' && buffer[lenfinal] != '\0')
-		lenfinal++;
-	rest = lenfinal - len;
-	final = malloc ((sizeof(char)) * (rest + 1));
-	
-	while (rest != cont)
-		final[cont] = buffer[cont++];
-	final[rest + 1] = '\0';
-	return (final);
+		return (NULL);
+	lenfinal = -1;
+	while (buffer[++lenfinal] != '\0')
+	{	
+		if (buffer[lenfinal] == '\n')
+		{
+			final = malloc ((sizeof(char)) * (len - lenfinal));
+			while ((len - lenfinal) != 0)
+			{
+				final[lenfinal] = buffer [lenfinal];
+				if (len == lenfinal)
+				{
+					final[lenfinal + 1] = '\0';
+					return (final);
+				}
+				lenfinal++;
+			}
+		}
+	}
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
@@ -94,22 +114,22 @@ char	*get_next_line(int fd)
 
 	if (fd <= 0 || (BUFFER_SIZE < 1))
 		return (NULL);
-len = 0;
-buffer = malloc((sizeof(char)) * (BUFFER_SIZE + 1));
-len = read(fd, buffer, BUFFER_SIZE);
-	if (strstatic)
-		strstatic = ft_join((char *)strstatic, (char *)buffer);
-	if (len < 0)
-		return (free (buffer), NULL);
-	else if (len == 0)
-		return (free (buffer), strstatic);
-	else if (len > 0)
+	len = 1;
+	buffer = malloc((sizeof(char)) * (BUFFER_SIZE + 1));
+	while (len > 0 && )
 	{
-		buffer[len + 1] = '\0';
-		line = ft_get_line_sp(len, (char *)buffer);
-		strstatic = ft_get_new_line(len, buffer);
+		len = read(fd, buffer, BUFFER_SIZE);
+		buffer[len] = '\0';
+		if (strstatic)
+			strstatic = ft_join(strstatic, buffer);
+		if (len < 0)
+			return (free (buffer), NULL);
+		else if (len == 0)
+			return (free (buffer), strstatic);
+		strstatic = ft_get_line_sp(len, buffer);
+		line = ft_get_new_line(len, buffer);
 	}
-free (buffer);
-line[ft_strlen(line) + 1] = '\0';
+	free (buffer);
+	line[ft_strlen(line) + 1] = '\0';
 	return (line);
 }
