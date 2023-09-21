@@ -51,16 +51,20 @@ char	*ft_get_line_sp(len, buffer)
 {
 	char	*cutline;
 	size_t	lenline;
+	size_t	cont;
+	size_t	contbuf;
 
 	lenline = 0;
+	cont = 0;
+	contbuf = 0;
 	if (!buffer)
 		return (NULL);
 	while (*buffer[lenline] != '\n' && *buffer[lenline] != '\0')
 		lenline++;
 	cutline = malloc ((sizeof(char)) * (lenline + 1));
+	while (lenline >= cont)
+		*cutline[cont++] = *buffer[contbuf++];
 	cutline[lenline + 1] = '\0';
-	while (lenline)
-		*cutline[lenline--] = *buffer[lenline--];
 	return (cutline);
 }
 
