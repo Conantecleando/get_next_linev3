@@ -33,17 +33,13 @@ char	*ft_join(strstatic, buffer)
 		return (strstatic);
 	cont = 0;
 	contbis = 0;
-	while (buffer[cont] != '\0')
-		cont++;
-	while (strstatic[contbis] != '\0')
-		contbis++;
-	len = (cont + contbis);
+	len = (ft_strlen(buffer) + ft_strlen(strstatic));
 	cube = malloc ((sizeof(char)) * len);
+	while (buffer[cont] != '\0'&& buffer)
+		cube[cont] = buffer[cont++];
+	while (strstatic[contbis] != '\0' && strstatic)
+		cube[cont + contbis] = strstatic[contbis++];
 	cube[len + 1] = '\0';
-	while (buffer[cont] != '\0')
-		*cube[len--] = *buffer[cont--];
-	while (strstatic[contbis])
-		*cube[len--] = *strstatic[contbis--];
 	return (cube);
 }		
 
@@ -73,6 +69,7 @@ char	*ft_get_new_line(len, buffer)
 	char	*final;
 	size_t	lenfinal;
 	size_t	rest;
+	size_t	cont;
 
 	if (!buffer)
 		return (0);
@@ -81,9 +78,10 @@ char	*ft_get_new_line(len, buffer)
 		lenfinal++;
 	rest = lenfinal - len;
 	final = malloc ((sizeof(char)) * (rest + 1));
+	
+	while (rest != cont)
+		final[cont] = buffer[cont++];
 	final[rest + 1] = '\0';
-	while (rest)
-		*final[rest--] = *buffer[len--];
 	return (final);
 }
 
