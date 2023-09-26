@@ -6,7 +6,7 @@
 /*   By: daroldan < daroldan@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:24:58 by daroldan          #+#    #+#             */
-/*   Updated: 2023/09/21 23:46:32 by daroldan         ###   ########.fr       */
+/*   Updated: 2023/09/26 02:58:24 by daroldan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,21 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	cont = 0;
 	cont2 = 0;
-	p = malloc (sizeof(char) * ((ft_strlen(s1) + 1)
-				+ (ft_strlen(s2)+ 1)));
+	p = malloc (sizeof(char) * ((ft_strlen(s1))
+				+ (ft_strlen(s2)) + 1));
 	if (!p)
 		return (0);
-	while (s1 != 0 && cont < (int)ft_strlen(s1))
+	while (s1[cont] != 0)
 	{
 		p[cont] = s1[cont];
 		cont++;
 	}
-	while (s2 != 0 && cont2 < (int)ft_strlen(s2))
+	while (s2[cont2] != 0)
 	{
 		p[cont + cont2] = s2[cont2];
 		cont2++;
 	}
-	p[(cont + cont2)] = '\0';
+	p[(ft_strlen(s1) + ft_strlen(s2))] = '\0';
 	return (p);
 }
 
@@ -44,18 +44,14 @@ char	*ft_joinfree(char *str, char *str2)
 
 	if (!str)
 	{
-		str = malloc ((sizeof(char)) + 1);
-		str[ft_strlen(str) + 1] = '\0';
-	}
-	if (!str2)
-	{
-		str2 = malloc ((sizeof(char)) + 1);
-		str[ft_strlen(str2) + 1] = '\0';
+		str = malloc ((sizeof(char)));
+		str[0] = '\0';
+		if (!str)
+			free (str);
 	}
 	s3 = ft_strjoin(str, str2);
 	s3[ft_strlen(s3) + 1] = '\0';
 	free (str);
-	str2 = NULL;
 	return (s3);
 }
 
@@ -68,6 +64,8 @@ char	*readsave(int fd, char	*strold)
 	posstr = 1;
 	heap = NULL;
 	heap = ft_strdup(strold);
+	if (fd < 0 || BUFFER_SIZE < 1)
+		return (NULL);
 	while (posstr > 0)
 	{	
 		posstr = read(fd, buffer, BUFFER_SIZE);
@@ -75,7 +73,6 @@ char	*readsave(int fd, char	*strold)
 			return (NULL);
 		else if (posstr == 0)
 			return (heap);
-		buffer[posstr] = '\0';
 		if (posstr < BUFFER_SIZE)
 			return (ft_joinfree(heap, buffer));
 		heap = ft_joinfree(heap, buffer);
@@ -116,18 +113,16 @@ char	*get_next_line(int fd)
 	char			*buffer;	
 	char			*print;
 
+	buffer = malloc ((sizeof (char)) * (15 + 1));
 	if ((fd <= 0) || (BUFFER_SIZE < 1))
-		return (NULL);
-	buffer = malloc ((sizeof (char)) * (BUFFER_SIZE + 1));
+		return (free(buffer), NULL);
 	buffer = readsave(fd, strstatic);
 	if (!buffer)
-	{
-		free (buffer);
-		return (NULL);
-	}
+		return (free(buffer), NULL);
 	len = ft_strlen(buffer);
 	buffer[len + 1] = '\0';
 	strstatic = ft_strrchr(buffer, '\n');
+	print = malloc ((sizeof(char)) * (ft_strlen(buffer) + 1));
 	print = ft_get_line(buffer);
 	free(buffer);
 	return (print);
