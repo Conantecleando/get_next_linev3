@@ -6,30 +6,36 @@
 /*   By: daroldan < daroldan@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 20:04:41 by daroldan          #+#    #+#             */
-/*   Updated: 2023/09/26 03:11:58 by daroldan         ###   ########.fr       */
+/*   Updated: 2023/09/27 22:06:32 by daroldan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	ft_bzero(void *s, size_t n)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	unsigned char	*p;
+	char	*p;
+	int		cont;
+	int		cont2;
 
-	p = s;
-	while (n--)
-		p[n] = 0;
-}
-
-void	*ft_calloc(size_t h, size_t len)
-{
-	void	*ptr;
-
-	ptr = malloc (h * len);
-	if (!ptr)
+	cont = 0;
+	cont2 = 0;
+	p = malloc (sizeof(char) * ((ft_strlen(s1))
+				+ (ft_strlen(s2)) + 1));
+	if (!p)
 		return (NULL);
-	ft_bzero(ptr, (h * len));
-	return (ptr);
+	while (s1[cont] != 0)
+	{
+		p[cont] = s1[cont];
+		cont++;
+	}
+	while (s2[cont2] != 0)
+	{
+		p[cont + cont2] = s2[cont2];
+		cont2++;
+	}
+	p[(ft_strlen(s1) + ft_strlen(s2))] = '\0';
+	return (p);
 }
 
 size_t	ft_strlen(char *s)
@@ -37,10 +43,8 @@ size_t	ft_strlen(char *s)
 	size_t	cont;
 
 	cont = 0;
-	if (!s || s[cont] == '\0')
-	{
+	if (!s)
 		return (0);
-	}
 	while (s[cont])
 		cont++;
 	return (cont);
@@ -64,63 +68,31 @@ char	*ft_strdup(char *source)
 		j[len] = source[len];
 		len++;
 	}
-	j[len + 1] = '\0';
+	j[len] = '\0';
 	return (j);
 }
 
-char	*ft_strrchr(char *chain, int c)
+char	*ft_strchr(char *chain, int chr)
 {
-	int		j;
-	int		s;
-	char	*subchain;
+	int	j;
 
-	j = ft_strlen(chain);
-	s = 0;
-	while (chain && j != s)
-	{
-		while (chain[s] != (char)c)
-		{
-			s++;
-			if (s > j)
-				return (NULL);
-		}
-		if (chain[s])
-		{
-			subchain = malloc ((sizeof(char)) * (s + 1));
-			if (!subchain)
-				return (free(subchain), NULL);
-			subchain = &chain[s + 1];
-			subchain[s + 1] = '\0';
-			return (free(chain), subchain);
-		}
-	}
-	return (NULL);
-}
-
-char	*ft_strchr(char *chain, int c)
-{
-	unsigned int	j;
-	unsigned int	len;
-	char			*subchain;
-
-	len = 0;
-	while (chain[len] != '\0')
-		len++;
+	j = 0;
 	if (!chain)
 		return (NULL);
-	j = 0;
-	while (len != j)
+	if (chain[j] == 0 && chr == 0)
+		return ((char *)chain);
+	while (chain[j] != '\0')
 	{
-		if (chain[j] == (char)c)
-		{
-			subchain = malloc ((sizeof(char)) * (j + 1));
-			if (!subchain)
-				return (free(subchain), NULL);
-			subchain = &chain[j + 1];
-			subchain[j + 1] = '\0';
-			return (free(chain), subchain);
-		}
+		if (chain[j] == (char)chr)
+			return ((char *) &chain[j]);
 		j++;
+		if (chain[j] == '\0')
+		{
+			if ((char)chr == '\0')
+				return ((char *) &chain[j]);
+			else
+				return (0);
+		}
 	}
-	return (NULL);
+	return (0);
 }

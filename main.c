@@ -6,7 +6,7 @@
 /*   By: daroldan < daroldan@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 23:08:08 by daroldan          #+#    #+#             */
-/*   Updated: 2023/09/26 01:36:48 by daroldan         ###   ########.fr       */
+/*   Updated: 2023/09/27 21:48:20 by daroldan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,12 @@ char *s;
 int fd;
 
 fd = open ("file.txt", O_RDONLY);
+s = get_next_line (fd);
+close (fd);
+printf("el string es %s", s);
 while (s)
 {
+	free(s);
 	s = get_next_line (fd);
 	printf("\n el string es %s", s);
 }
